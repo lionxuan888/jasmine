@@ -1,8 +1,9 @@
 package com.tian.logger;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.logging.Logger;
 
 /**
  * Created by Administrator on 2016/8/5.
@@ -11,9 +12,8 @@ public class LoggerTest {
 
     @Test
     public void testLogger() throws Exception {
-        Logger logger = Logger.getLogger("test");
-        logger.info("hah");
-
-
+        Logger logger = LoggerFactory.getLogger(this.getClass());
+        logger.info("哈哈");
+        System.out.println("");
     }
 }

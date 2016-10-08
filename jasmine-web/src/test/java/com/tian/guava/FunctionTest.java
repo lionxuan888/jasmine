@@ -11,7 +11,6 @@ public class FunctionTest {
 
     @org.junit.Test
     public void testFunction() throws Exception {
-        //Lists.transform(Lists.newArrayList(),);
 
     }
 }
