@@ -8,7 +8,5 @@ http://www.w3.org/2001/XMLSchema-instance ">
     <name>jasmine</name>
     <modules>
         <module>jasmine-web</module>
-        <module>jasmine-api</module>
-        <module>jasmine-web</module>
     </modules>
 </project>
