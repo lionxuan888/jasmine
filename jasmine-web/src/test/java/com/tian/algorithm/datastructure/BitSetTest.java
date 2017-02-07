@@ -1,4 +1,4 @@
-package com.tian.datastructure;
+package com.tian.algorithm.datastructure;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;

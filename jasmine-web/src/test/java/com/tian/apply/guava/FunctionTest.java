@@ -1,4 +1,4 @@
-package com.tian.guava;
+package com.tian.apply.guava;
 
 import com.google.common.base.Function;
 import com.google.common.base.Splitter;
@@ -6,9 +6,8 @@ import com.google.common.collect.*;
 import org.apache.commons.lang.time.DateUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Months;
+import org.junit.Test;
 
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +66,17 @@ public class FunctionTest {
         revaluationAndWriteOffInChargeEmail.add("22@qunbar.com");
         System.out.println(revaluationAndWriteOffInChargeEmail);
 
+
+    }
+
+    @Test
+    public void test() throws Exception {
+        System.out.println("10092 : " + Integer.toHexString(10092));
+        System.out.println("9789 : " + Integer.toHexString(9789));
+        System.out.println("9790 : " + Integer.toHexString(9790));
+        System.out.println("9791 : " + Integer.toHexString(9791));
+        System.out.println("9792 : " + Integer.toHexString(9792));
+        System.out.println("9793 : " + Integer.toHexString(9793));
 
     }
 }

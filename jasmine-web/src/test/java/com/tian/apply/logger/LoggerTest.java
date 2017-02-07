@@ -1,4 +1,4 @@
-package com.tian.logger;
+package com.tian.apply.logger;
 
 import org.junit.Test;
 import org.slf4j.Logger;
