@@ -27,7 +27,7 @@ public class PdfBoxTest {
     // 发票金额
     private static String invoiceAmountRegex = "(.*?[价][税][合][计].*?)(\\d+)(.*)";
     // 发票抬头
-    private static String invoiceTitleRegex = "[校]\\s[验]\\s[码]:\\s(\\d+?\\s?)+?[名]\\s+?[称]:\\s+(.*)\\s+";
+    private static String invoiceTitleRegex = "[校]\\s[验]\\s[码]:\\s(\\d+?\\s?)+?[名]\\s+?[称]:\\s+(.*?)\\s+?";
     // 开票地区
     private static String localBillingRegex = "(.*?\\s+?)([\\u4E00-\\u9FA5]+[增][值][税][电][子][普][通][发][票])(.*)";
 
