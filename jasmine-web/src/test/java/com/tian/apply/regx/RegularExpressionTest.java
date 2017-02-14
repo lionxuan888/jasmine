@@ -9,23 +9,19 @@ import java.util.regex.Pattern;
 public class RegularExpressionTest {
 
     public static void main(String[] args) {
-        String line = "This order was placed for QT3000! OK?";
-        String pattern = "(<A>.*?)(<B>\\d+)(<C>.*)";
+        String pattern = "a?";
+        String line = "aaaaa";
 
         // Create a Pattern object
         Pattern r = Pattern.compile(pattern);
 
         // Now create matcher object.
         Matcher m = r.matcher(line);
+        boolean matches = m.matches();
+        System.out.println(matches);
+        int i = m.groupCount();
+        System.out.println(i);
 
-        if (m.find()) {
-            String b = m.group("B");
-            System.out.println("Found value: " + m.group(1));
-            System.out.println("Found value: " + m.group(2));
-            System.out.println("Found value: " + m.group(3));
-        } else {
-            System.out.println("NO MATCH");
-        }
     }
 
 }
