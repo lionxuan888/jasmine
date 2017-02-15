@@ -1,6 +1,7 @@
 package com.tian.apply.pdf;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -17,23 +18,95 @@ import java.util.regex.Pattern;
  */
 public class PdfBoxTest {
     // 发票代码
-    private static String invoiceCodeRegex = "(.*?[发][票][代][码]:.*?)(\\d+)(.*)";
+    private static String invoiceCodeRegex = "[发][票][代][码]:\\s*?(\\d+)";
+    private Pattern invoiceCodePattern = Pattern.compile(invoiceCodeRegex);
+
     // 发票号码
-    private static String invoiceNumberRegex = "(.*?[发][票][号][码]:.*?)(\\d+)(.*)";
+    private static String invoiceNumberRegex = "[发][票][号][码]:\\s*?(\\d+)";
+    private Pattern invoiceNumberPattern = Pattern.compile(invoiceNumberRegex);
+
     // 开票日期
-    private static String invoiceDateRegex = "(.*?[开][票][日][期]:.*?)(\\d+)(.*)";
+    private static String invoiceDateRegex = "[开][票][日][期]:\\s*?(\\d+)\\s*?[年]\\s*?(\\d+)\\s*?[月]\\s*?(\\d+)\\s*?[日]";
+    private Pattern invoiceDatePattern = Pattern.compile(invoiceDateRegex);
+
     // 校验码
-    private static String invoiceCheckCodeRegex = "(.*?[校][验][码]:.*?)(\\d+)(.*)";
+    private static String invoiceCheckCodeRegex = "[校]\\s*?[验]\\s*?[码]:\\s*?((\\d+\\s*)+)";
+    private Pattern invoiceCheckCodePattern = Pattern.compile(invoiceCheckCodeRegex);
+
     // 发票金额
-    private static String invoiceAmountRegex = "(.*?[价][税][合][计].*?)(\\d+)(.*)";
+    private static String invoiceAmountRegex = "[价][税][合][计].*?(\\d+\\.?\\d+)";
+    private Pattern invoiceAmountPattern = Pattern.compile(invoiceAmountRegex);
+
     // 发票抬头
-    private static String invoiceTitleRegex = "[校]\\s[验]\\s[码]:\\s(\\d+?\\s?)+?[名]\\s+?[称]:\\s+(.*?)\\s+?";
+    private static String invoiceTitleRegex = "[校]\\s*?[验]\\s*?[码]:\\s*?(\\d+\\s*)+?[名]\\s+?[称]:\\s+?(.*?)\\s+?";
+    private Pattern invoiceTitlePattern = Pattern.compile(invoiceTitleRegex);
+
     // 开票地区
     private static String localBillingRegex = "(.*?\\s+?)([\\u4E00-\\u9FA5]+[增][值][税][电][子][普][通][发][票])(.*)";
+    private Pattern localBillingPattern = Pattern.compile(localBillingRegex);
 
     @Test
     public void testPdfBox() throws Exception {
+        findInvoiceCode();
+        findInvoiceNumber();
+        findInvoiceDate();
+        findInvoiceCheckCode();
+        findInvoiceAmount();
+        findInvoiceTitle();
+        findLocalBilling();
+    }
 
+    private void findInvoiceCode() {
+        Matcher matcher = invoiceCodePattern.matcher(text);
+        while (matcher.find()) {
+            System.out.println("发票代码：" + matcher.group(1));
+        }
+    }
+
+    private void findInvoiceNumber() {
+        Matcher matcher = invoiceNumberPattern.matcher(text);
+        while (matcher.find()) {
+            System.out.println("发票号码：" + matcher.group(1));
+        }
+    }
+
+    private void findInvoiceDate() {
+        Matcher matcher = invoiceDatePattern.matcher(text);
+        while (matcher.find()) {
+            System.out.println("开票日期：" + matcher.group(1) + matcher.group(2) + matcher.group(3));
+        }
+    }
+
+    private void findInvoiceCheckCode() {
+        Matcher matcher = invoiceCheckCodePattern.matcher(text);
+        while (matcher.find()) {
+            System.out.println("校验码：" + matcher.group(1).trim());
+        }
+    }
+
+    private void findInvoiceAmount() {
+        Matcher matcher = invoiceAmountPattern.matcher(text);
+        while (matcher.find()) {
+            System.out.println("发票金额：" + matcher.group(1).trim());
+        }
+    }
+
+    private void findInvoiceTitle() {
+        Matcher matcher = invoiceTitlePattern.matcher(text);
+        while (matcher.find()) {
+            System.out.println("发票抬头：" + matcher.group(2).trim());
+        }
+    }
+
+    private void findLocalBilling() {
+        Matcher matcher = localBillingPattern.matcher(text);
+        while (matcher.find()) {
+            System.out.println("开票地区：" + matcher.group(2).trim());
+        }
+    }
+
+    private String text  = "";
+    {
         PDDocument document = null;
         try {
             document = PDDocument.load(new File("C:\\Users\\Administrator\\Desktop\\电子发票-1.pdf"));
@@ -42,31 +115,13 @@ public class PdfBoxTest {
             PDPage firstPage = document.getPage(0);
 
             pdfTextStripper.processPage(firstPage);
-            String text = pdfTextStripper.getText(document);
+            text = pdfTextStripper.getText(document);
             System.out.println(text);
-            Pattern localBillingPattern = Pattern.compile(localBillingRegex);
-            Pattern invoiceTitleRegexPattern = Pattern.compile(invoiceTitleRegex);
             System.out.println("==========================\n\t\t\t结果\n=========================");
-            find(invoiceTitleRegexPattern, text, "发票抬头", 4);
-            find(localBillingPattern, text, "开票地区", 2);
 
-            String mydata = "some string with 'the data i want' inside";
-            Pattern pattern = Pattern.compile("'(.*?)'");
-            Matcher matcher = pattern.matcher(mydata);
-            if (matcher.find())
-            {
-                System.out.println(matcher.group(1));
-            }
-
-        } finally {
-        }
-
-    }
-
-    private void find(Pattern localBillingPattern, String text, String name, int group) {
-        Matcher matcher = localBillingPattern.matcher(text);
-        while (matcher.find()) {
-            System.out.println(name + "：" + matcher.group(group));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally{
         }
     }
 }
