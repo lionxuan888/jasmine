@@ -5,9 +5,11 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.text.PDFTextStripper;
 
+import org.apache.pdfbox.text.PDFTextStripperByArea;
 import org.junit.Test;
 
 
+import java.awt.*;
 import java.io.*;
 
 import java.util.List;
@@ -50,6 +52,10 @@ public class PdfBoxTest {
     private static String localBillingRegex = "(.*?\\s*)([\\u4E00-\\u9FA5]+[增][值][税][电][子][普][通][发][票])(.*)";
     public static Pattern localBillingPattern = Pattern.compile(localBillingRegex);
 
+    // 开票内容
+    private static String invoiceContentRegex = "[税]\\s*[额]\\s*((\\S*)\\s*.*?\\s*)[合]";
+    public static Pattern invoiceContentPattern = Pattern.compile(invoiceContentRegex);
+
     @Test
     public void testParser() throws Exception {
 
@@ -73,6 +79,14 @@ public class PdfBoxTest {
         findInvoiceTitle();
         findLocalBilling();
         findSellerName();
+        findInvoiceContent();
+    }
+
+    private void findInvoiceContent() {
+        Matcher matcher = invoiceContentPattern.matcher(text);
+        while (matcher.find()) {
+            System.out.println("开票内容group2：" + matcher.group(2));
+        }
     }
 
 
@@ -140,7 +154,7 @@ public class PdfBoxTest {
     {
         PDDocument document = null;
         try {
-            document = PDDocument.load(new File("C:\\Users\\Administrator\\Desktop\\CSG_autotest20170320170221100356.pdf"));
+            document = PDDocument.load(new File("C:\\Users\\Administrator\\Desktop\\D45467838784.pdf"));
             PDFTextStripper pdfTextStripper = new PDFTextStripper();
             pdfTextStripper.setSortByPosition(true);
             PDPage firstPage = document.getPage(0);
@@ -148,7 +162,19 @@ public class PdfBoxTest {
             pdfTextStripper.processPage(firstPage);
             text = pdfTextStripper.getText(document);
             System.out.println(text);
+
+            System.out.println("==========================\n\t\t\t开票内容\n=========================");
+
+            PDFTextStripperByArea pdfTextStripperByArea = new PDFTextStripperByArea();
+            pdfTextStripperByArea.setSortByPosition(true);
+            Rectangle rect = new Rectangle(5, 170, 170, 99);
+            pdfTextStripperByArea.addRegion("class1", rect);
+            pdfTextStripperByArea.extractRegions(firstPage);
+            System.out.println("Text in the area:" + rect);
+            System.out.println(pdfTextStripperByArea.getTextForRegion("class1"));
+
             System.out.println("==========================\n\t\t\t结果\n=========================");
+
 
         } catch (Exception e) {
             e.printStackTrace();
