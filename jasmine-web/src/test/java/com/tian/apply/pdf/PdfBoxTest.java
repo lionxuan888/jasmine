@@ -70,6 +70,13 @@ public class PdfBoxTest {
     }
 
     @Test
+    public void testString() throws Exception {
+        String aaa= "我的动感地带";
+        System.out.println(aaa.length());
+        System.out.println(aaa.substring(0, 5));
+    }
+
+    @Test
     public void testPdfBox() throws Exception {
         findInvoiceCode();
         findInvoiceNumber();
@@ -154,7 +161,8 @@ public class PdfBoxTest {
     {
         PDDocument document = null;
         try {
-            document = PDDocument.load(new File("C:\\Users\\Administrator\\Desktop\\D45467838784.pdf"));
+            document = PDDocument.load(new File("C:\\Users\\Administrator\\Desktop\\滴滴电子发票.pdf"));
+            //document = PDDocument.load(new File("C:\\Users\\Administrator\\Desktop\\D45467838784.pdf"));
             PDFTextStripper pdfTextStripper = new PDFTextStripper();
             pdfTextStripper.setSortByPosition(true);
             PDPage firstPage = document.getPage(0);
@@ -167,7 +175,8 @@ public class PdfBoxTest {
 
             PDFTextStripperByArea pdfTextStripperByArea = new PDFTextStripperByArea();
             pdfTextStripperByArea.setSortByPosition(true);
-            Rectangle rect = new Rectangle(5, 170, 170, 99);
+            // Rectangle rect = new Rectangle(5, 170, 170, 99);
+            Rectangle rect = new Rectangle(5, 160, 170, 99);
             pdfTextStripperByArea.addRegion("class1", rect);
             pdfTextStripperByArea.extractRegions(firstPage);
             System.out.println("Text in the area:" + rect);
