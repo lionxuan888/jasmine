@@ -1,5 +1,7 @@
 package com.tian.apply.pdf;
 
+import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdfparser.PDFStreamParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -12,6 +14,7 @@ import org.junit.Test;
 import java.awt.*;
 import java.io.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,6 +42,11 @@ public class PdfBoxTest {
     // 发票金额
     private static String invoiceAmountRegex = "价税合计.*?(\\d+\\.?\\d+)";
     public static Pattern invoiceAmountPattern = Pattern.compile(invoiceAmountRegex);
+
+
+    // 发票金额2
+    private static String invoiceAmount2Regex = "￥(\\d+\\.?\\d+)";
+    public static Pattern invoiceAmount2Pattern = Pattern.compile(invoiceAmount2Regex);
 
     // 发票抬头
     //"[校]\\s*[验]\\s*[码]:\\s*(\\d+\\s*)+?[名]\\s*[称]:\\s*(\\S*)";
@@ -134,13 +142,39 @@ public class PdfBoxTest {
         }
     }
 
-    private void findInvoiceAmount() {
+    @Test
+    public void findInvoiceAmount() {
         Matcher matcher = invoiceAmountPattern.matcher(text);
         while (matcher.find()) {
             System.out.println("发票金额(价税合计)：" + matcher.group(1).trim());
         }
+        Matcher amountMatcher2 = invoiceAmount2Pattern.matcher(text);
+        List<String> amountStringList = Lists.newArrayList();
+        while (amountMatcher2.find()) {
+            amountStringList.add(amountMatcher2.group(1));
+        }
+        String str = getMaxAmount(amountStringList);
     }
 
+
+    /**
+     * 获取最大金额
+     *
+     * @param amountStringList
+     * @return
+     */
+
+    private String getMaxAmount(List<String> amountStringList) {
+        BigDecimal maxAmount = BigDecimal.ZERO;
+        for (String amountStr : amountStringList) {
+            BigDecimal amount = new BigDecimal(amountStr);
+            if (amount.compareTo(maxAmount) > 0) {
+                maxAmount = amount;
+            }
+        }
+        System.out.println("获取到最大金额" + maxAmount);
+        return maxAmount.toString();
+    }
 
     @Test
     public void findInvoiceTitle() {
@@ -183,7 +217,7 @@ public class PdfBoxTest {
         PDDocument document = null;
         try {
             // 1487301251998-滴滴电子发票
-            document = PDDocument.load(new File("C:\\Users\\Administrator\\Desktop\\1487301251998-滴滴电子发票.pdf"));
+            document = PDDocument.load(new File("C:\\Users\\Administrator\\Desktop\\pdfElement\\1487301251998-滴滴电子发票.pdf"));
             //document = PDDocument.load(new File("C:\\Users\\Administrator\\Desktop\\D45467838784.pdf"));
             PDFTextStripper pdfTextStripper = new PDFTextStripper();
             pdfTextStripper.setSortByPosition(true);
