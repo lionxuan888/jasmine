@@ -12,8 +12,8 @@ public class LoggerTest {
 
     @Test
     public void testLogger() throws Exception {
-        Logger logger = LoggerFactory.getLogger(this.getClass());
+        Logger logger = LoggerFactory.getLogger(LoggerTest.class);
         logger.info("哈哈");
-        System.out.println("");
+        System.out.println("fff");
     }
 }

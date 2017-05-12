@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Administrator on 2016/8/2.
@@ -77,6 +78,15 @@ public class FunctionTest {
         System.out.println("9791 : " + Integer.toHexString(9791));
         System.out.println("9792 : " + Integer.toHexString(9792));
         System.out.println("9793 : " + Integer.toHexString(9793));
+
+        List<String> strings = Splitter.on(",").trimResults().omitEmptyStrings().splitToList("");
+        System.out.println(strings);
+
+        Set<Integer> set = Sets.newHashSet();
+set.add(Integer.valueOf(1));
+        set.add(Integer.valueOf(2));
+        set.add(Integer.valueOf(1));
+        System.out.println(set);
 
     }
 }
