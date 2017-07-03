@@ -1,5 +1,7 @@
 package com.tian.apply.regx;
 
+import org.junit.Test;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,4 +26,26 @@ public class RegularExpressionTest {
 
     }
 
+    @Test
+    public void testSplit() throws Exception {
+        System.out.println("1,".split(",").length);
+        System.out.println(",1".split(",").length);
+        System.out.println("1,1".split(",").length);
+        System.out.println(",".split(",", -1).length);
+        System.out.println("--------------");
+        Pattern compile = Pattern.compile(",");
+        Matcher matcher = compile.matcher("12,");
+        while (matcher.find()) {
+            String group = matcher.group();
+            System.out.println(group);
+        }
+        System.out.println("--------------");
+        String aaa = "111";
+        String bbb = "111";
+        String sa = new String("111");
+        String sb = sa;
+        sb = "333";
+        System.out.println(aaa == bbb);
+        System.out.println(sa == sb);
+    }
 }
