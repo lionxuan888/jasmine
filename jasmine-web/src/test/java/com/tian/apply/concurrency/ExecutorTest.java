@@ -42,7 +42,7 @@ public class ExecutorTest {
 
     public static void main(String[] args) throws Exception {
         LinkedBlockingQueue<String> blockingQueue = new LinkedBlockingQueue<String>(4);
-        ReentrantLock reentrantLock = new ReentrantLock();
+        final ReentrantLock reentrantLock = new ReentrantLock();
         Runnable target = new Runnable() {
             @Override
             public void run() {
@@ -63,7 +63,9 @@ public class ExecutorTest {
         };
         Thread subThread_1 = new Thread(target);
 
+        subThread_1.run();
         Thread subThread_2 = new Thread(target);
+        subThread_2.start();
         while(Thread.activeCount() > 1){}
 
         System.out.println("主程序结束");

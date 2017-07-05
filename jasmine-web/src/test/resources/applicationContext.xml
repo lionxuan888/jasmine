@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+    <aop:config expose-proxy="true" proxy-target-class="true"/>
+    <aop:aspectj-autoproxy expose-proxy="true" proxy-target-class="true"/>
+    <context:component-scan base-package="com.qunar.qpayable,com.qunar.qreaper"/>
+    <context:annotation-config/>
+
+
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="15"/>
+        <property name="maxPoolSize" value="50"/>
+        <property name="queueCapacity" value="1000"/>
+        <property name="keepAliveSeconds" value="200"/>
+        <property name="rejectedExecutionHandler">
+            <bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy"/>
+        </property>
+    </bean>
+
+    <import resource="applicationContext-dao-qpayable.xml"/>
+    <import resource="applicationContext-dao-qpx.xml"/>
+    <import resource="../dubbo/dubbo.xml"/>
+    <import resource="applicationContext-qconfig.xml"/>
+    <import resource="applicationContext-qmq.xml"/>
+    <import resource="applicationContext-web.xml"/>
+    <import resource="applicationContext-email.xml"/>
+    <import resource="applicationContext-qes.xml"/>
+    <import resource="classpath:sedis-bean-config.xml"/>
+
+    <!--自定义注解形式的参数类型转化器-->
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="formatters">
+            <set>
+                <bean class="com.qunar.qpayable.common.spring.formatter.MoneyFormatAnnotationFormatFactory"/>
+            </set>
+        </property>
+    </bean>
+</beans>
