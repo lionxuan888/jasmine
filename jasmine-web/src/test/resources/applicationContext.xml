@@ -12,36 +12,7 @@
 
     <aop:config expose-proxy="true" proxy-target-class="true"/>
     <aop:aspectj-autoproxy expose-proxy="true" proxy-target-class="true"/>
-    <context:component-scan base-package="com.qunar.qpayable,com.qunar.qreaper"/>
+    <context:component-scan base-package="com.tian"/>
     <context:annotation-config/>
 
-
-    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
-        <property name="corePoolSize" value="15"/>
-        <property name="maxPoolSize" value="50"/>
-        <property name="queueCapacity" value="1000"/>
-        <property name="keepAliveSeconds" value="200"/>
-        <property name="rejectedExecutionHandler">
-            <bean class="java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy"/>
-        </property>
-    </bean>
-
-    <import resource="applicationContext-dao-qpayable.xml"/>
-    <import resource="applicationContext-dao-qpx.xml"/>
-    <import resource="../dubbo/dubbo.xml"/>
-    <import resource="applicationContext-qconfig.xml"/>
-    <import resource="applicationContext-qmq.xml"/>
-    <import resource="applicationContext-web.xml"/>
-    <import resource="applicationContext-email.xml"/>
-    <import resource="applicationContext-qes.xml"/>
-    <import resource="classpath:sedis-bean-config.xml"/>
-
-    <!--自定义注解形式的参数类型转化器-->
-    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
-        <property name="formatters">
-            <set>
-                <bean class="com.qunar.qpayable.common.spring.formatter.MoneyFormatAnnotationFormatFactory"/>
-            </set>
-        </property>
-    </bean>
 </beans>

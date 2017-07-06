@@ -1,22 +1,23 @@
 package com.tian.apply.spring;
 
+import com.tian.FooService;
+import com.tian.TestSpringService;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by xiaoxuan.jin on 2017/7/5.
  */
 public class SpringTest {
 
-    public static void main(String[] args) throws Exception{
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        simpleDateFormat.setLenient(false);
-        Date parse = simpleDateFormat.parse("2017-13-30");
-        System.out.println(parse);
-        char a = 33;
-        System.out.println(a);
+    public static void main(String[] args) throws Exception {
+        BeanFactory beanFactory = new ClassPathXmlApplicationContext("applicationContext.xml");
+        TestSpringService testSpringService = beanFactory.getBean(TestSpringService.class);
+        FooService fooService = beanFactory.getBean(FooService.class);
+        FooService fooServiceFromTest = testSpringService.fooService;
+        System.out.println("判断是否相等：" + (fooServiceFromTest == fooService));
+
+
     }
 
 }
