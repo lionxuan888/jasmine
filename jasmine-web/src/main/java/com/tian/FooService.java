@@ -8,7 +8,7 @@ import javax.annotation.Resource;
  * Created by xiaoxuan.jin on 2017/7/6.
  */
 @Service
-public class FooService {
+public class FooService implements IFooService {
 
     @Resource
     public TestSpringService testSpringService;

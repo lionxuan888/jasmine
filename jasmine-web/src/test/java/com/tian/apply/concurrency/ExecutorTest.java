@@ -1,13 +1,11 @@
 package com.tian.apply.concurrency;
 
-import com.google.common.primitives.Ints;
-import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 
-import java.util.Comparator;
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by xiaoxuan.jin on 2017/6/22.
@@ -23,55 +21,62 @@ public class ExecutorTest {
             @Override
             public void run() {
                 try {
+                    String threadName = Thread.currentThread().getName();
+                    System.out.println(threadName + "  entering thread and sleep 5s");
                     Thread.sleep(5000);
-                    System.out.println("thread is running...");
+                    System.out.println(threadName + " thread is ending...");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
             }
         });
-        subThread.start();
-        Thread thread = Thread.currentThread();
-        while (thread.isAlive()) {
-            thread.wait();
-        }
-
-        System.out.println("main thread exit...");
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
+        scheduledExecutorService.schedule(subThread, 3, TimeUnit.SECONDS);
+        Thread.currentThread().join();
     }
 
     public static void main(String[] args) throws Exception {
-        LinkedBlockingQueue<String> blockingQueue = new LinkedBlockingQueue<String>(4);
-        final ReentrantLock reentrantLock = new ReentrantLock();
-        Runnable target = new Runnable() {
-            @Override
+        final Object lockObj = new Object();
+        Runnable runnable = new Runnable() {
             public void run() {
-                try {
-                    String threadName = Thread.currentThread().getName();
-                    System.out.println("entering " + threadName);
-                    reentrantLock.lock();
-                    System.out.println(threadName + "获取到分布式锁，开始运行程序");
-                    Thread.sleep(5000);
-                    System.out.println(threadName + " sub thread running end...");
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } finally {
-                    reentrantLock.unlock();
+                String threadName = Thread.currentThread().getName();
+                System.out.println(threadName + " out lock entering outer code");
+                synchronized (lockObj) {
+                    System.out.println(threadName + " entering sleeping.....");
+                    //sleep(3000);
+                    waiting(lockObj);
+                    System.out.println(threadName + " entering running.....");
+                    for (int i = 0; i < 10; i++) {
+                        System.out.println(i);
+                    }
+                    System.out.println(threadName + " entering ending.....");
                 }
+                System.out.println(threadName + "out lock execute some other code code code code code code code code ");
+            }
 
+            private void sleep(int i) {
+                try {
+                    Thread.sleep(i);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            private void waiting(Object lockObj) {
+                try {
+                    lockObj.wait();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         };
-        Thread subThread_1 = new Thread(target);
+        Thread subThreadA = new Thread(runnable);
+        Thread subThreadB = new Thread(runnable);
+        subThreadA.start();
+        subThreadB.start();
+        Thread thread = Thread.currentThread();
+        thread.join();;
 
-        subThread_1.run();
-        Thread subThread_2 = new Thread(target);
-        subThread_2.start();
-        while(Thread.activeCount() > 1){}
-
-        System.out.println("主程序结束");
-
-        int TERMINATED =  3 << 29;
-        System.out.println(TERMINATED);
     }
 
 }
