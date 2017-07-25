@@ -36,8 +36,8 @@ public class BlockingQueueTest<E> {
     private Entry<E> head = null;
 
     private class Entry<E> {
-        Entry<E> next;
         E ele;
+        Entry<E> next;
 
         Entry(E ele) {
             this.ele = ele;
