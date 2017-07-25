@@ -31,16 +31,16 @@ public class HashMapTest<K, V> {
     }
 
     public void put(K k, V v) {
-        int hash = hash(k);
-        int i = indexFor(hash, table.length);
-        for (Entry e = table[i]; e!=null; e = e.next()) {
-            if (e.hash == hash && (e.k == k || e.k.equals(k))) {
-                V oldValue = e.v;
-                e.v = v;
-                return oldValue;
-            }
-        }
-        addEntry();
+//        int hash = hash(k);
+//        int i = indexFor(hash, table.length);
+//        for (Entry e = table[i]; e!=null; e = e.next()) {
+//            if (e.hash == hash && (e.k == k || e.k.equals(k))) {
+//                V oldValue = e.v;
+//                e.v = v;
+//                return oldValue;
+//            }
+//        }
+//        addEntry();
     }
 
     public V get(K key) {
@@ -48,7 +48,7 @@ public class HashMapTest<K, V> {
         int index = indexFor(hash, table.length);
         for (Entry e = table[index]; e != null; e = e.next) {
             if (e.hash == hash && (e.k == key || e.k.equals(key))) {
-                return e.v;
+          //      return e.v;
             }
         }
         return null;

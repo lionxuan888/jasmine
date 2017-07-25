@@ -115,7 +115,7 @@ public class BlockingQueueTest<E> {
         takeLock.lock();
         try {
             while (count.get() == 0) {
-                notEmpty.await();
+           //     notEmpty.await();
             }
             e = dequeue();
             c = count.getAndDecrement();
