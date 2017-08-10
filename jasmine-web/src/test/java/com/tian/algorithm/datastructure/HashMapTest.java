@@ -60,7 +60,7 @@ public class HashMapTest<K, V> {
         size ++;
     }
 
-    // hash arithmetic
+    // hash algorithm
     private int hash(K k) {
         return k.hashCode();
     }

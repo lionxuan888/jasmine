@@ -1,10 +1,10 @@
 package com.tian.apply.concurrency;
 
+import com.google.common.collect.Lists;
 import org.junit.Test;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -36,7 +36,34 @@ public class ExecutorTest {
         Thread.currentThread().join();
     }
 
-    public static void main(String[] args) throws Exception {
+    @Test
+    public void testThreadPoolExecutor() throws Exception {
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        List<Future> futures = Lists.newArrayList();
+        for (int i = 0; i < 3; i++) {
+            futures.add(executorService.submit(new Runnable() {
+                public void run() {
+                    try {
+                        Thread.sleep(1000 * 60 * 10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println(Thread.currentThread().getName() + " running....");
+                }
+            }));
+        }
+        for (Future future : futures) {
+            future.get();
+        }
+        System.out.println("main exit....");
+    }
+
+    /**
+     * 测试wait和sleep对锁的释放
+     * @throws Exception
+     */
+    @Test
+    public void testWait() throws Exception {
         final Object lockObj = new Object();
         Runnable runnable = new Runnable() {
             public void run() {
@@ -64,7 +91,7 @@ public class ExecutorTest {
             }
             private void waiting(Object lockObj) {
                 try {
-                    lockObj.wait();
+                    lockObj.wait(1000);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -74,8 +101,14 @@ public class ExecutorTest {
         Thread subThreadB = new Thread(runnable);
         subThreadA.start();
         subThreadB.start();
-        Thread thread = Thread.currentThread();
-        thread.join();;
+        subThreadA.join();
+        subThreadB.join();
+        System.out.println("main 结束");
+
+    }
+
+    public static void main(String[] args) throws Exception {
+
 
     }
 

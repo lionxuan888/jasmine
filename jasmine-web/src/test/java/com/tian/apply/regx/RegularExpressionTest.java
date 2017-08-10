@@ -48,4 +48,17 @@ public class RegularExpressionTest {
         System.out.println(aaa == bbb);
         System.out.println(sa == sb);
     }
+
+    @Test
+    public void testString() throws Exception {
+        String aaa = "code";
+        String bbb = new String("code");
+        bbb = bbb.intern();
+        System.out.println(aaa == bbb);
+        System.out.println("================");
+        Integer intA = 200;
+        Integer intB = new Integer(200);
+        System.out.println(intA == intB);
+
+    }
 }
