@@ -36,7 +36,6 @@ public class Sort {
     public static void main(String[] args) throws Exception {
         int[] array = new int[]{6, 7, 8, 9, 11, 0};
         qsort(array, 0, 5);
-
         for (int i : array) {
             System.out.print(i + ",");
         }
