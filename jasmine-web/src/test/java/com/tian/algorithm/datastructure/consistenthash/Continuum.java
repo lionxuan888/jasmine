@@ -1,4 +1,4 @@
-package com.tian.algorithm.datastructure;
+package com.tian.algorithm.datastructure.consistenthash;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -10,7 +10,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * Created by xiaoxuan.jin on 2017/8/11.
  */
 public class Continuum {
-
 
     private String name;
 
@@ -201,5 +200,4 @@ public class Continuum {
             return 1;
         }
     }
-
 }

@@ -3,6 +3,7 @@ package com.tian.apply.spring;
 import com.tian.FooService;
 import com.tian.IFooService;
 import com.tian.TestSpringService;
+import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -25,4 +26,9 @@ public class SpringTest {
         a.clone();
     }
 
+    @Test
+    public void testLRU() throws Exception {
+
+
+    }
 }

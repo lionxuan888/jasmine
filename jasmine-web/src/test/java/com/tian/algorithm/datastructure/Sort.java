@@ -33,9 +33,46 @@ public class Sort {
         return low;
     }
 
+
+    public static void quickSort(int[] array, int low, int high) {
+        if (low < high) {
+            int pivotIndex = partition2(array, low, high);
+            quickSort(array, low, pivotIndex - 1);
+            quickSort(array, pivotIndex + 1, high);
+        }
+    }
+
+    private static int partition2(int[] array, int low, int high) {
+        int pivot = array[low];
+        while (low < high) {
+            while (low < high && array[high] >= pivot) high--;
+            array[low] = array[high];
+            while (low < high && array[low] <= pivot) low++;
+            array[high] = array[low];
+        }
+        array[low] = pivot;
+        return low;
+    }
+
+
+    public static void bubbleSort(int array[]) {
+        int length = array.length;
+        for (int i = 0; i < length; i++) {
+            for (int j = 0; j < length - i - 1; j++) {
+                if (array[j] > array[j + 1]) {
+                    int temp = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = temp;
+                }
+            }
+        }
+    }
+
+
     public static void main(String[] args) throws Exception {
-        int[] array = new int[]{6, 7, 8, 9, 11, 0};
-        qsort(array, 0, 5);
+        int[] array = new int[]{6, 7, 8, 9, 11, 0, 3, 2, 1, 5, 4};
+        //maoPao(array);
+                quickSort(array, 0, 10);
         for (int i : array) {
             System.out.print(i + ",");
         }
