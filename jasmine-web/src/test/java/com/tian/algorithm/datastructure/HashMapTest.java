@@ -3,6 +3,9 @@ package com.tian.algorithm.datastructure;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.NavigableMap;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * Created by xiaoxuan.jin on 2017/2/7.
@@ -82,10 +85,12 @@ public class HashMapTest<K, V> {
     }
 
     public static void main(String[] args) {
-        HashMap hashMap = new HashMap();
-        for (int i = 0; i < 17; i++) {
-            hashMap.put(i, "v" + i);
-        }
-        System.out.println("done");
+        NavigableMap<Integer, String> treeMap = new TreeMap<Integer, String>();
+        treeMap.put(1, "a");
+        treeMap.put(2, "b");
+        treeMap.put(3, "c");
+        treeMap.put(4, "d");
+        treeMap.put(5, "c");
+        System.out.println(treeMap.lowerEntry(10));
     }
 }
