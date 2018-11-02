@@ -40,14 +40,14 @@ ${r'<mapper namespace="需要替换成dao的全路径">'}
         ${r'</foreach>'}
     ${r'</insert>'}
 
-    ${r'<delete id="delete"'}${r' parameterType="Integer">'}
+    ${r'<delete id="delete"'}${r' parameterType="Long">'}
         delete from ${classModel.tableName!''} ${r'where id = #{id}'}
     ${r'</delete>'}
 
     ${r'<delete id="deleteByIds"'}${r' parameterType="java.util.List">'}
         delete from ${classModel.tableName!''} ${r'where id in('}
         ${r'<foreach collection="list" item="item"  separator="," >'}
-        ${r'#{item}'}
+            ${r'#{item}'}
         ${r'</foreach>)'}
     ${r'</delete>'}
 
@@ -64,11 +64,9 @@ ${r'<mapper namespace="需要替换成dao的全路径">'}
         ${r'where id = #{id}'}
     ${r'</update>'}
 
-    ${r'<select id="findById"'}${r' parameterType="Integer" resultType="'}${classModel.uname!''}${r'Model">'}
+    ${r'<select id="findById"'}${r' parameterType="Long" resultType="'}${classModel.uname!''}${r'Model">'}
         SELECT
-        <#list propertyModelList as model>
-            ${model.columnName!''} as ${model.lname!''} <#if model_has_next>,</#if>
-        </#list>
+            ${r'<include refid="selectColumns"/>'}
         FROM
             ${classModel.tableName!''}
         ${r'where id = #{id}'}
@@ -78,27 +76,10 @@ ${r'<mapper namespace="需要替换成dao的全路径">'}
             WHERE 1=1
     ${r'</sql>'}
 
-    ${r'<select id="queryForPage" parameterType="'}${classModel.uname!''}${r'ModelSearchBox" resultType="'}${classModel.uname!''}${r'Model">'}
-        SELECT
-            ${r'<include refid="selectColumns"/>'}
-        FROM
-        ${classModel.tableName!''}
-            ${r'<include refid="baseCondition"/>'}
-    ${r'</select>'}
-
     ${r'<sql id="selectColumns" >'}
         <#list propertyModelList as model>
             ${model.columnName!''} as ${model.lname!''} <#if model_has_next>,</#if>
         </#list>
     ${r'</sql>'}
-
-
-    ${r'<select id="count" parameterType="'}${classModel.uname!''}${r'ModelSearchBox" resultType="Integer">'}
-        SELECT
-            count(*)
-        FROM
-            ${classModel.tableName!''}
-        ${r'<include refid="baseCondition"/>'}
-    ${r'</select>'}
 
 ${r'</mapper>'}

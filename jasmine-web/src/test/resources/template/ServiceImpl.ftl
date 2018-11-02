@@ -28,10 +28,10 @@ public class ${classModel.uname!''}ServiceImpl implements ${classModel.uname!''}
      * @return return id
      */
     @Override
-    public int save(${classModel.uname!''}Model model) {
+    public Long save(${classModel.uname!''}Model model) {
         if (model == null) {
-            logger.info("保存${classModel.desc!''}失败，id={}", -1);
-            return -1;
+            logger.warn("保存${classModel.desc!''}失败，id={}", -1);
+            throw new RuntimeException("保存失败");
         }
         ${classModel.lname!''}Dao.save(model);
         logger.info("保存${classModel.desc!''}成功，id={}", model.getId());
@@ -62,14 +62,13 @@ public class ${classModel.uname!''}ServiceImpl implements ${classModel.uname!''}
      * @return return true if delete success
      */
     @Override
-    public boolean delete(int id) {
+    public void delete(Long id) {
         if (id <= 0) {
             logger.info("删除${classModel.desc!''}失败，id={},count={}", 0, 0);
-            return false;
+            return;
         }
         int count = ${classModel.lname!''}Dao.delete(id);
         logger.info("删除${classModel.desc!''}成功，id={},count={}", id, count);
-        return count > 0;
     }
 
     /**
@@ -79,18 +78,17 @@ public class ${classModel.uname!''}ServiceImpl implements ${classModel.uname!''}
      */
     @Transactional
     @Override
-    public boolean deleteByIds(List${r'<Integer>'} list){
+    public void deleteByIds(List${r'<Long>'} list){
         if (CollectionUtils.isEmpty(list)) {
             logger.info("删除${classModel.desc!''}失败,count={}",0);
-            return false;
+            return;
         }
-        List${r'<'}List${r'<Integer>'}${r'>'} partitionList = Lists.partition(list, 1000);
+        List${r'<'}List${r'<Long>'}${r'>'} partitionList = Lists.partition(list, 1000);
         int count = 0;
-        for (List${r'<Integer>'} partition : partitionList) {
+        for (List${r'<Long>'} partition : partitionList) {
             count += ${classModel.lname!''}Dao.deleteByIds(partition);
         }
         logger.info("删除${classModel.desc!''}成功,count={}", count);
-        return count==list.size();
     }
 
     /**
@@ -99,14 +97,18 @@ public class ${classModel.uname!''}ServiceImpl implements ${classModel.uname!''}
      * @return return true if update success
      */
     @Override
-    public boolean update(${classModel.uname!''}Model model) {
+    public int update(${classModel.uname!''}Model model) {
         if (model == null || model.getId() <= 0) {
             logger.info("更新${classModel.desc!''}失败，参数不合法");
-            return false;
+            return 0;
         }
         int count = ${classModel.lname!''}Dao.update(model);
+        if (count != 1) {
+           logger.error("更新${classModel.desc!''}失败，id={},count={}", model.getId(), count);
+           throw new RuntimeException("更新失败" + model.getId());
+        }
         logger.info("更新${classModel.desc!''}成功，id={},count={}", model.getId(), count);
-        return count > 0;
+        return count;
     }
 
     /**
@@ -115,7 +117,7 @@ public class ${classModel.uname!''}ServiceImpl implements ${classModel.uname!''}
      * @return the finding model
      */
     @Override
-    public ${classModel.uname!''}Model findById(int id){
+    public ${classModel.uname!''}Model findById(Long id){
         if (id <= 0) {
             logger.info("根据id获取${classModel.desc!''}失败，id={}", id);
             return null;
@@ -123,35 +125,5 @@ public class ${classModel.uname!''}ServiceImpl implements ${classModel.uname!''}
         ${classModel.uname!''}Model model = ${classModel.lname!''}Dao.findById(id);
         logger.info("根据id获取${classModel.desc!''}成功，id={}", id);
         return model;
-    }
-
-    /**
-     * 分页获取${classModel.desc!''}数据
-     * @param searchBox the search box
-     * @return the query list
-     */
-    @Override
-    public List${r'<'}${classModel.uname!''}Model${r'>'} queryForPage(${classModel.uname!''}ModelSearchBox searchBox){
-
-        List${r'<'}${classModel.uname!''}Model${r'>'} modelList = ${classModel.lname!''}Dao.queryForPage(searchBox);
-
-        if (CollectionUtils.isEmpty(modelList)) {
-            modelList = Lists.newArrayList();
-        }
-
-        logger.info("分页获取${classModel.desc!''}数据，page={},pageSize={}", searchBox.getPageNo(), searchBox.getPageSize());
-        return modelList;
-    }
-
-    /**
-     * 获取${classModel.desc!''}数据总条数
-     * @param searchBox the search box
-     * @return the count
-     */
-    @Override
-    public int count(${classModel.uname!''}ModelSearchBox searchBox){
-        int count = ${classModel.lname!''}Dao.count(searchBox);
-        logger.info("获取${classModel.desc!''}数据总条数，count={}", count);
-        return count;
     }
 }
