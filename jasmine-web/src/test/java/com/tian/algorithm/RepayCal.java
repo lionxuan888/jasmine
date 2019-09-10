@@ -1,7 +1,10 @@
 package com.tian.algorithm;
 
+import com.google.common.util.concurrent.Uninterruptibles;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by logan on 2019/9/10.
@@ -10,16 +13,20 @@ public class RepayCal {
 
 
     public static void main(String[] args) {
+        Uninterruptibles.sleepUninterruptibly(3, TimeUnit.SECONDS);
         // 年利率
-        BigDecimal yearRate = new BigDecimal("0.0539");
+        BigDecimal yearRate = new BigDecimal("0.0540");
         // 贷款年限
-        double year = 30;
-        BigDecimal debtAmount = new BigDecimal("1000000");
+        int year = 30;
+        BigDecimal debtAmount = new BigDecimal("300000");
         BigDecimal everyMonthPayAmount = everyMonthPay(yearRate, year, debtAmount);
-        System.out.println("每月还款额度:" + everyMonthPayAmount);
-        System.out.println("共计还款 : " + everyMonthPayAmount.multiply(new BigDecimal(30).multiply(new BigDecimal(12))));
-
-        System.out.println("如果第4年发生了还款, 还款额 30W ");
+        System.out.println("贷款总额:" + debtAmount);
+        System.out.println("每月还款额度:" + everyMonthPayAmount.setScale(2, RoundingMode.HALF_UP));
+        System.out.println("共计还款 : " + everyMonthPayAmount.multiply(new BigDecimal(year).multiply(new BigDecimal(12))).setScale(2, RoundingMode.HALF_UP));
+        // 已经还款几年
+        int repayYear = 5;
+        BigDecimal repayAmount = new BigDecimal("200000");
+        System.out.println(String.format("如果第%s年发生了还款, 还款额 %s ", (repayYear+1), repayAmount));
 
 
         /*
@@ -27,30 +34,37 @@ public class RepayCal {
          * 1. 如果还款, 总共支出多少,收入多少 (收入部分的本金采用提前还款重新计算之后每月少还的钱, 计算截止到最后还款期限)
          * 2. 如果不还款, 总共支出多少, 收入多少
          */
-        BigDecimal repayAmount = new BigDecimal("300000");
-        // 第几年还款
-        int repayYear = 5;
+
+
         // 1. 如果还款
         {
             BigDecimal allPay = BigDecimal.ZERO;
-            BigDecimal balanceBenJinAmount = getBalanceDebtAmount(yearRate, debtAmount, everyMonthPayAmount, (repayYear-1) * 12);
-            BigDecimal balanceMonthPay = everyMonthPay(yearRate, year - (repayYear-1), balanceBenJinAmount.subtract(repayAmount));
+            BigDecimal balanceBenJinAmount = getBalanceDebtAmount(yearRate, debtAmount, everyMonthPayAmount, repayYear * 12);
+            BigDecimal balanceMonthPay = everyMonthPay(yearRate, year - repayYear, balanceBenJinAmount.subtract(repayAmount));
+            System.out.println("-----------------------第一种方式, 提前还款(每月还款额减少,期限不变) 分割线---------------------");
+            System.out.println(String.format("剩余本金%s,还款之后剩余本金%s",
+                    balanceBenJinAmount.setScale(2, RoundingMode.HALF_UP),
+                    balanceBenJinAmount.subtract(repayAmount).setScale(2, RoundingMode.HALF_UP)));
             System.out.println("剩余岁月每月还款额:" + balanceMonthPay.setScale(2, RoundingMode.HALF_UP));
-
-            System.out.println("剩余岁月总支出:" + balanceMonthPay.multiply(new BigDecimal((year - (repayYear- 1)) * 12)));
+            System.out.println("剩余岁月总支出(每个月1期,每月还款额乘以剩余期数):" + balanceMonthPay.multiply(new BigDecimal((year - repayYear) * 12)).setScale(2, RoundingMode.HALF_UP));
 
             BigDecimal shaoHuanAmountEveryMonth = everyMonthPayAmount.subtract(balanceMonthPay).setScale(2, RoundingMode.HALF_UP);
             System.out.println("每个月少还:" + shaoHuanAmountEveryMonth);
             BigDecimal shaoHuanAmountYearInCome = shaoHuanAmountEveryMonth.multiply(new BigDecimal("12"));
             BigDecimal shaoHuanIncomeAllSum = BigDecimal.ZERO;
-            for (int i = 0; i < year - repayYear; i++) {
-                BigDecimal augend = liCaiIncome((int) year - repayYear - i, shaoHuanAmountYearInCome);
-                System.out.println("第" + (repayYear + i + 1)  + "年的理财收入: " + augend.setScale(2, RoundingMode.HALF_UP));
+            for (int i = 0; i < year - repayYear -1; i++) {
+                int liCaiYear = (int) year - repayYear - (i+1);
+                BigDecimal augend = liCaiIncome(liCaiYear, shaoHuanAmountYearInCome);
+//                System.out.println(String.format("第%s年的理财收入(理财年限%s,理财金额%s) :", i +1, liCaiYear, shaoHuanAmountYearInCome) + augend.setScale(2, RoundingMode.HALF_UP));
                 shaoHuanIncomeAllSum = shaoHuanIncomeAllSum.add(augend);
             }
-            System.out.println("少还的钱总收入:" + shaoHuanIncomeAllSum.setScale(2, RoundingMode.HALF_UP));
-//            liCaiIncome(30, new BigDecimal("30"));
+            System.out.println(String.format("少还的钱拿来投资获得总收入(每年年底获得%s然后拿来投资):%s" ,shaoHuanAmountYearInCome, shaoHuanIncomeAllSum.setScale(2, RoundingMode.HALF_UP)));
 
+            System.out.println("-----------------------第二种方式, 不提前还款, 分割线---------------------");
+            System.out.println("剩余岁月总支出(按照现有方式不变,每月还款额乘以剩余期数):" + everyMonthPayAmount.multiply(new BigDecimal((year - repayYear) * 12)).setScale(2, RoundingMode.HALF_UP));
+            int liCaiYear = year - repayYear;
+            BigDecimal liCaiIncomeOfRepay = liCaiIncome(liCaiYear, repayAmount);
+            System.out.println("剩余岁月总收入(还款额复利计算):" + liCaiIncomeOfRepay.setScale(2, RoundingMode.HALF_UP));
         }
 
 
