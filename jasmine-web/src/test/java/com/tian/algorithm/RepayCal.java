@@ -1,6 +1,7 @@
 package com.tian.algorithm;
 
 import com.google.common.util.concurrent.Uninterruptibles;
+import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -90,6 +91,24 @@ public class RepayCal {
          *
          */
 
+    }
+
+    @Test
+    public void testIncome() {
+        System.out.println(1700*25*12);
+        BigDecimal repayAmount = new BigDecimal("150000");
+        BigDecimal liCaiIncome = liCaiIncome(25, repayAmount);
+        BigDecimal monthAmount = new BigDecimal("1000");
+        BigDecimal yearAmount = monthAmount.multiply(new BigDecimal(12));
+        BigDecimal allSumAmount = BigDecimal.ZERO;
+        for (int i = 0; i < 25; i++) {
+            int liCaiYear = 25 - i;
+            BigDecimal augend = liCaiIncome(liCaiYear, yearAmount);
+//                System.out.println(String.format("第%s年的理财收入(理财年限%s,理财金额%s) :", i +1, liCaiYear, shaoHuanAmountYearInCome) + augend.setScale(2, RoundingMode.HALF_UP));
+            allSumAmount = allSumAmount.add(augend);
+        }
+        System.out.println("全部理财结果:" + liCaiIncome.setScale(2, RoundingMode.HALF_UP));
+        System.out.println("迭代理财结果:" + allSumAmount.setScale(2, RoundingMode.HALF_UP));
     }
 
     /**
