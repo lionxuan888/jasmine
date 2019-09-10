@@ -46,7 +46,7 @@ public class MurmurHash implements Hashing {
      * 
      * @param buf The bytes to hash.
      * @param seed The seed for the hash.
-     * @return The 32 bit murmur hash of the bytes in the buffer.
+     * @return The 32 bit murmur hash of the bytes in the buffer.S
      */
     public static int hash(ByteBuffer buf, int seed) {
         // save byte order for later restoration

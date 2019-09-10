@@ -59,8 +59,8 @@ public class GenerateService {
         templateNameMap.put("Dao.java", "Dao.ftl");
         templateNameMap.put("Service.java", "Service.ftl");
         templateNameMap.put("ServiceImpl.java", "ServiceImpl.ftl");
-        templateNameMap.put("SearchBox.java", "BaseSearchBox.ftl");
-        templateNameMap.put("ModelSearchBox.java", "SearchBox.ftl");
+//        templateNameMap.put("SearchBox.java", "BaseSearchBox.ftl");
+//        templateNameMap.put("ModelSearchBox.java", "SearchBox.ftl");
         templateNameMap.put("Controller.java", "Controller.ftl");
     }
 
