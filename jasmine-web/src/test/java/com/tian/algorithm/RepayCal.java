@@ -14,19 +14,19 @@ public class RepayCal {
 
 
     public static void main(String[] args) {
-        Uninterruptibles.sleepUninterruptibly(3, TimeUnit.SECONDS);
+        Uninterruptibles.sleepUninterruptibly(1, TimeUnit.SECONDS);
         // 年利率
-        BigDecimal yearRate = new BigDecimal("0.0540");
+        BigDecimal yearRate = new BigDecimal("0.040");
         // 贷款年限
         int year = 30;
-        BigDecimal debtAmount = new BigDecimal("300000");
+        BigDecimal debtAmount = new BigDecimal("1000000");
         BigDecimal everyMonthPayAmount = everyMonthPay(yearRate, year, debtAmount);
         System.out.println("贷款总额:" + debtAmount);
         System.out.println("每月还款额度:" + everyMonthPayAmount.setScale(2, RoundingMode.HALF_UP));
         System.out.println("共计还款 : " + everyMonthPayAmount.multiply(new BigDecimal(year).multiply(new BigDecimal(12))).setScale(2, RoundingMode.HALF_UP));
         // 已经还款几年
-        int repayYear = 5;
-        BigDecimal repayAmount = new BigDecimal("200000");
+        int repayYear = 3;
+        BigDecimal repayAmount = new BigDecimal("300000");
         System.out.println(String.format("如果第%s年发生了还款, 还款额 %s ", (repayYear+1), repayAmount));
 
 
@@ -47,7 +47,7 @@ public class RepayCal {
                     balanceBenJinAmount.setScale(2, RoundingMode.HALF_UP),
                     balanceBenJinAmount.subtract(repayAmount).setScale(2, RoundingMode.HALF_UP)));
             System.out.println("剩余岁月每月还款额:" + balanceMonthPay.setScale(2, RoundingMode.HALF_UP));
-            System.out.println("剩余岁月总支出(每个月1期,每月还款额乘以剩余期数):" + balanceMonthPay.multiply(new BigDecimal((year - repayYear) * 12)).setScale(2, RoundingMode.HALF_UP));
+            System.out.println("剩余岁月总支出(每个月1期,每月还款额乘以剩余期数):" + balanceMonthPay.multiply(new BigDecimal((year - repayYear) * 12)).add(repayAmount).setScale(2, RoundingMode.HALF_UP));
 
             BigDecimal shaoHuanAmountEveryMonth = everyMonthPayAmount.subtract(balanceMonthPay).setScale(2, RoundingMode.HALF_UP);
             System.out.println("每个月少还:" + shaoHuanAmountEveryMonth);
