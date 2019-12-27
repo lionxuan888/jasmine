@@ -30,7 +30,7 @@ public class GenerateService {
 
     public GenerateService(String url, String userName, String pwd) {
         try{
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url, userName, pwd);
         }catch (Exception e){
             e.printStackTrace();

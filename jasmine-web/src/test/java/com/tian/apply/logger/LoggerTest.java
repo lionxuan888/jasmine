@@ -14,6 +14,14 @@ public class LoggerTest {
     public void testLogger() throws Exception {
         Logger logger = LoggerFactory.getLogger(LoggerTest.class);
         logger.info("哈哈");
-        System.out.println("fff");
     }
+
+    public static void main(String[] args) {
+
+        Integer aa = 128;
+        int bbb = 128;
+
+        System.out.println(aa == bbb);
+    }
+
 }
