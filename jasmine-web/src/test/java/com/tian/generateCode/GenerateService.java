@@ -180,7 +180,7 @@ public class GenerateService {
         String user = "mifi_admin";
         String pwd = "OTg1NjJjNzlkNmI4ZTQzMGJhODRiMDIw";
         GenerateService generateService = new GenerateService(url, user, pwd);
-        String[] tables = new String[]{"cmb_finance_apply"};
+        String[] tables = new String[]{"cmb_customer_info"};
         String filePath = "/Users/admin/Documents/code";
         generateService.generateCode("scf_fund_center", tables, filePath);
         System.out.println("生成完成");

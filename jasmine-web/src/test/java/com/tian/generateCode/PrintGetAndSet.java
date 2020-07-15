@@ -11,8 +11,8 @@ import java.lang.reflect.Field;
 public class PrintGetAndSet {
 
 
-    public static void main(String[] args) {
-//        printSet(TRCustomerAuditView.class, "view");
+    public static void main(String[] args) throws Exception {
+        printSet(CmbCustomerInfoDO.class, "customerInfo");
 //        printSet(TPFinanceApplyInvoice.class, "invoice");
 //        printSet(TPFinanceApplyContract.class, "contract");
         System.out.println("分割线-------------");

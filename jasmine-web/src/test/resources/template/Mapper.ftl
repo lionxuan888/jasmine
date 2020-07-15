@@ -15,10 +15,10 @@ ${r'<mapper namespace="需要替换成dao的全路径">'}
         <#list propertyModelList as model>
             <#if model.lname == "id">
             <#else>
-                <#if model.lname == "createTime" || model.lname == "updateTime">now()<#if model_has_next>,</#if>
-                <#else>
-                 ${model.lname!''}<#if model_has_next>,</#if>
-                </#if>
+            <#if model.lname == "createTime" || model.lname == "updateTime">now()<#if model_has_next>,</#if>
+            <#else>
+            ${r'#{'}${model.lname!''}${r'}'}<#if model_has_next>,</#if>
+            </#if>
             </#if>
         </#list>
         )
@@ -38,10 +38,10 @@ ${r'<mapper namespace="需要替换成dao的全路径">'}
         (<#list propertyModelList as model>
             <#if model.lname == "id">
             <#else>
-                <#if model.lname == "createTime" || model.lname == "updateTime">now()<#if model_has_next>,</#if>
-                <#else>
-                ${r'#{item.'}${model.lname!''}${r'}'}<#if model_has_next>,</#if>
-                </#if>
+            <#if model.lname == "createTime" || model.lname == "updateTime">now()<#if model_has_next>,</#if>
+            <#else>
+        ${r'#{item.'}${model.lname!''}${r'}'}<#if model_has_next>,</#if>
+            </#if>
             </#if>
         </#list> )
         ${r'</foreach>'}
