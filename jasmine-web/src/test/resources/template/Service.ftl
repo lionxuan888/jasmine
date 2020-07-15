@@ -10,13 +10,13 @@ public interface ${classModel.uname!''}Service {
      * @param model the save model
      * @return return id
      */
-    Long save(${classModel.uname!''}Model model);
+    Long save(${classModel.uname!''}DO model);
 
     /**
     * 批量保存${classModel.desc!''}数据
     * @param list the save list
     */
-    void saveBatch(List${r'<'}${classModel.uname!''}Model${r'>'} list);
+    void saveBatch(List${r'<'}${classModel.uname!''}DO${r'>'} list);
 
     /**
     * 删除${classModel.desc!''}数据
@@ -37,12 +37,12 @@ public interface ${classModel.uname!''}Service {
     * @param model the update model
     * @return return true if update success
     */
-    int update(${classModel.uname!''}Model model);
+    int update(${classModel.uname!''}DO model);
 
     /**
     * 根据id获取${classModel.desc!''}数据
     * @param id the id
     * @return the finding model
     */
-    ${classModel.uname!''}Model findById(Long id);
+    ${classModel.uname!''}DO findById(Long id);
 }

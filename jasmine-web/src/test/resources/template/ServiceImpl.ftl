@@ -1,6 +1,6 @@
 
 import com.google.common.base.Preconditions;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
@@ -28,7 +28,7 @@ public class ${classModel.uname!''}ServiceImpl implements ${classModel.uname!''}
      * @return return id
      */
     @Override
-    public Long save(${classModel.uname!''}Model model) {
+    public Long save(${classModel.uname!''}DO model) {
         if (model == null) {
             logger.warn("保存${classModel.desc!''}失败，id={}", -1);
             throw new RuntimeException("保存失败");
@@ -44,13 +44,13 @@ public class ${classModel.uname!''}ServiceImpl implements ${classModel.uname!''}
      */
     @Transactional
     @Override
-    public void saveBatch(List${r'<'}${classModel.uname!''}Model${r'>'} list) {
+    public void saveBatch(List${r'<'}${classModel.uname!''}DO${r'>'} list) {
        if (CollectionUtils.isEmpty(list)) {
             logger.info("批量保存${classModel.desc!''}失败，size={}", 0);
             return;
         }
-        List${r'<'}List${r'<'}${classModel.uname!''}Model${r'>>'} partitionList = Lists.partition(list, 1000);
-        for (List${r'<'}${classModel.uname!''}Model${r'>'} partition : partitionList) {
+        List${r'<'}List${r'<'}${classModel.uname!''}DO${r'>>'} partitionList = Lists.partition(list, 1000);
+        for (List${r'<'}${classModel.uname!''}DO${r'>'} partition : partitionList) {
             ${classModel.lname!''}Dao.saveBatch(partition);
             logger.info("批量保存${classModel.desc!''}成功，size={}", partition.size());
         }
@@ -97,7 +97,7 @@ public class ${classModel.uname!''}ServiceImpl implements ${classModel.uname!''}
      * @return return true if update success
      */
     @Override
-    public int update(${classModel.uname!''}Model model) {
+    public int update(${classModel.uname!''}DO model) {
         if (model == null || model.getId() <= 0) {
             logger.info("更新${classModel.desc!''}失败，参数不合法");
             return 0;
@@ -117,12 +117,12 @@ public class ${classModel.uname!''}ServiceImpl implements ${classModel.uname!''}
      * @return the finding model
      */
     @Override
-    public ${classModel.uname!''}Model findById(Long id){
+    public ${classModel.uname!''}DO findById(Long id){
         if (id <= 0) {
             logger.info("根据id获取${classModel.desc!''}失败，id={}", id);
             return null;
         }
-        ${classModel.uname!''}Model model = ${classModel.lname!''}Dao.findById(id);
+        ${classModel.uname!''}DO model = ${classModel.lname!''}Dao.findById(id);
         logger.info("根据id获取${classModel.desc!''}成功，id={}", id);
         return model;
     }

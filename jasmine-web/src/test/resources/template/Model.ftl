@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * ${classModel.desc!''}
  */
-public class ${classModel.uname!''}Model {
+public class ${classModel.uname!''}DO {
 
     <#list propertyModelList as model>
     /**

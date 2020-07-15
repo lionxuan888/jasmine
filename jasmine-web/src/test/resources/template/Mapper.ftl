@@ -2,7 +2,7 @@ ${r'<?xml version="1.0" encoding="UTF-8"?>'}
 ${r'<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">'}
 ${r'<mapper namespace="需要替换成dao的全路径">'}
 
-    ${r'<insert id="save"'}${r' parameterType="'}${classModel.uname!''}${r'Model" useGeneratedKeys="true" keyProperty="id">'}
+    ${r'<insert id="save"'}${r' parameterType="'}${classModel.uname!''}${r'DO" useGeneratedKeys="true" keyProperty="id">'}
         insert into ${classModel.tableName!''}
         (
         <#list propertyModelList as model>
@@ -15,7 +15,10 @@ ${r'<mapper namespace="需要替换成dao的全路径">'}
         <#list propertyModelList as model>
             <#if model.lname == "id">
             <#else>
-            ${r'#{'}${model.lname!''}${r'}'}<#if model_has_next>,</#if>
+                <#if model.lname == "createTime" || model.lname == "updateTime">now()<#if model_has_next>,</#if>
+                <#else>
+                 ${model.lname!''}<#if model_has_next>,</#if>
+                </#if>
             </#if>
         </#list>
         )
@@ -33,8 +36,12 @@ ${r'<mapper namespace="需要替换成dao的全路径">'}
         )values
         ${r'<foreach collection="list" item="item"  separator="," >'}
         (<#list propertyModelList as model>
-            <#if model.lname == "id"><#else>
-            ${r'#{item.'}${model.lname!''}${r'}'}<#if model_has_next>,</#if>
+            <#if model.lname == "id">
+            <#else>
+                <#if model.lname == "createTime" || model.lname == "updateTime">now()<#if model_has_next>,</#if>
+                <#else>
+                ${r'#{item.'}${model.lname!''}${r'}'}<#if model_has_next>,</#if>
+                </#if>
             </#if>
         </#list> )
         ${r'</foreach>'}
@@ -51,7 +58,7 @@ ${r'<mapper namespace="需要替换成dao的全路径">'}
         ${r'</foreach>)'}
     ${r'</delete>'}
 
-    ${r'<update id="update"'}${r' parameterType="'}${classModel.uname!''}${r'Model">'}
+    ${r'<update id="update"'}${r' parameterType="'}${classModel.uname!''}${r'DO">'}
         update
             ${classModel.tableName!''}
         set
@@ -64,7 +71,7 @@ ${r'<mapper namespace="需要替换成dao的全路径">'}
         ${r'where id = #{id}'}
     ${r'</update>'}
 
-    ${r'<select id="findById"'}${r' parameterType="Long" resultType="'}${classModel.uname!''}${r'Model">'}
+    ${r'<select id="findById"'}${r' parameterType="Long" resultType="'}${classModel.uname!''}${r'DO">'}
         SELECT
             ${r'<include refid="selectColumns"/>'}
         FROM

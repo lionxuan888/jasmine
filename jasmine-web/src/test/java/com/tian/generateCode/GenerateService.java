@@ -54,7 +54,7 @@ public class GenerateService {
         columnMap.put("double","BigDecimal");
         columnMap.put("float","BigDecimal");
 
-        templateNameMap.put("Model.java", "Model.ftl");
+        templateNameMap.put("DO.java", "Model.ftl");
         templateNameMap.put("Mapper.xml", "Mapper.ftl");
         templateNameMap.put("Dao.java", "Dao.ftl");
         templateNameMap.put("Service.java", "Service.ftl");
@@ -150,7 +150,7 @@ public class GenerateService {
 
     private String getFilePath(String filePath, String key){
         filePath = StringUtils.endsWith(filePath,"/") ? filePath : filePath + "/";
-        if (key.contains("Model")) {
+        if (key.contains("DO")) {
             filePath = filePath + "model/";
         } else if (key.contains("Mapper")) {
             filePath = filePath + "mapper/";
@@ -173,5 +173,16 @@ public class GenerateService {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://10.38.161.220:3306/scf_fund_center?useUnicode=true&characterEncoding=utf8";
+        String user = "mifi_admin";
+        String pwd = "OTg1NjJjNzlkNmI4ZTQzMGJhODRiMDIw";
+        GenerateService generateService = new GenerateService(url, user, pwd);
+        String[] tables = new String[]{"cmb_finance_apply"};
+        String filePath = "/Users/admin/Documents/code";
+        generateService.generateCode("scf_fund_center", tables, filePath);
+        System.out.println("生成完成");
     }
 }
